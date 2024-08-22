@@ -1,5 +1,7 @@
 <script lang="ts">
+	// Imports
 	import { get, readable } from "svelte/store";
+	// Headless table imports
 	import { Render, Subscribe, createRender, createTable } from "svelte-headless-table";
 	import {
 		addColumnFilters,
@@ -9,12 +11,15 @@
 		addSortBy,
 		addTableFilter,
 	} from "svelte-headless-table/plugins";
+	// Import data
 	import type { Task } from "../data/schemas.js";
+	// Import Table components
 	import {
 		DataTableCheckbox,
 		DataTableColumnHeader,
 		DataTablePagination,
 		DataTablePriorityCell,
+		DataTableTestColCell,
 		DataTableRowActions,
 		DataTableStatusCell,
 		DataTableTitleCell,
@@ -22,9 +27,10 @@
 	} from "./index.js";
 
 	import * as Table from "$lib/registry/new-york/ui/table/index.js";
-
+	// Table column schema
 	export let data: Task[];
 
+	// Create table
 	const table = createTable(readable(data), {
 		select: addSelectedRows(),
 		sort: addSortBy({
@@ -40,6 +46,7 @@
 		hide: addHiddenColumns(),
 	});
 
+	// Table columns
 	const columns = table.createColumns([
 		table.display({
 			id: "select",
