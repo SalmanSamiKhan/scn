@@ -18,7 +18,7 @@
 		});
 	}
 
-	const hidableCols = ["title", "status", "priority"];
+	const hidableCols = ["ad_code","exp_serial","exp_year","invoice_no","title", "status"];
 </script>
 
 <DropdownMenu.Root>
