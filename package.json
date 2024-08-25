@@ -31,6 +31,7 @@
 		"frappe-datatable": "^1.17.16",
 		"lucide-svelte": "^0.428.0",
 		"mode-watcher": "^0.4.1",
+		"my-app": "file:",
 		"paneforge": "^0.0.5",
 		"svelte-radix": "^1.1.1",
 		"sveltekit-superforms": "^2.17.0",

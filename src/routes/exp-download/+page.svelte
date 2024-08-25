@@ -177,6 +177,7 @@
 
 <script lang="ts">
     import DataTable from "./(components)/data-table.svelte";
+	import Spinner from "./(components)/spinner.svelte";
     import UserNav from "./(components)/user-nav.svelte";
     import { urls } from "$lib/Common/Rendering_Data/urls.js";
     import { _fetch_data } from "$lib/API/GET";
@@ -216,7 +217,8 @@
         </div>
     </div>
     {#if isLoading}
-        <p>Loading data...</p>
+        <!-- <p>Loading data...</p> -->
+		<Spinner />
     {:else if data.length === 0}
         <p>No data available</p>
     {:else}
