@@ -19,7 +19,7 @@
     DataTableCheckbox,
     DataTableColumnHeader,
     DataTablePagination,
-    DataTablePriorityCell,
+    // DataTablePriorityCell,
     DataTableRowActions,
     DataTableStatusCell,
     DataTableTitleCell,
@@ -28,7 +28,9 @@
 
   import * as Table from '$lib/registry/new-york/ui/table/index.js';
 
-  export let data: Task[];
+  // export let data: Task[];
+  // export let data = [];
+  export let data: Task[] = [];
 
   const table = createTable(readable(data), {
     select: addSelectedRows(),
@@ -72,9 +74,10 @@
     }),
     table.column({
       accessor: 'ad_code',
-      header: () => {
-        return 'Ad Code';
-      },
+      // header: () => {
+      //   return 'Ad Code';
+      // },
+      header: 'Ad Code',
       id: 'ad_code',
       plugins: {
         sort: {
@@ -84,9 +87,10 @@
     }),
     table.column({
       accessor: 'exp_serial',
-      header: () => {
-        return 'Exp Serial';
-      },
+      // header: () => {
+      //   return 'Exp Serial';
+      // },
+      header: 'Exp Serial',
       id: 'exp_serial',
       plugins: {
         sort: {
@@ -96,9 +100,10 @@
     }),
     table.column({
       accessor: 'exp_year',
-      header: () => {
-        return 'Exp Year';
-      },
+      // header: () => {
+      //   return 'Exp Year';
+      // },
+      header: 'Exp Year',
       id: 'exp_year',
       plugins: {
         sort: {
@@ -108,9 +113,10 @@
     }),
     table.column({
       accessor: 'invoice_no',
-      header: () => {
-        return 'Invoice No';
-      },
+      // header: () => {
+      //   return 'Invoice No';
+      // },
+      header: 'Invoice No',
       id: 'invoice_no',
       plugins: {
         sort: {
@@ -158,33 +164,33 @@
         },
       },
     }),
-    table.column({
-      accessor: 'priority',
-      id: 'priority',
-      header: 'Priority',
-      cell: ({ value }) => {
-        return createRender(DataTablePriorityCell, {
-          value,
-        });
-      },
-      plugins: {
-        colFilter: {
-          fn: ({ filterValue, value }) => {
-            if (filterValue.length === 0) return true;
-            if (!Array.isArray(filterValue) || typeof value !== 'string')
-              return true;
+    // table.column({
+    //   accessor: 'priority',
+    //   id: 'priority',
+    //   header: 'Priority',
+    //   cell: ({ value }) => {
+    //     return createRender(DataTablePriorityCell, {
+    //       value,
+    //     });
+    //   },
+    //   plugins: {
+    //     colFilter: {
+    //       fn: ({ filterValue, value }) => {
+    //         if (filterValue.length === 0) return true;
+    //         if (!Array.isArray(filterValue) || typeof value !== 'string')
+    //           return true;
 
-            return filterValue.some((filter) => {
-              return value.includes(filter);
-            });
-          },
-          initialFilterValue: [],
-          render: ({ filterValue }) => {
-            return get(filterValue);
-          },
-        },
-      },
-    }),
+    //         return filterValue.some((filter) => {
+    //           return value.includes(filter);
+    //         });
+    //       },
+    //       initialFilterValue: [],
+    //       render: ({ filterValue }) => {
+    //         return get(filterValue);
+    //       },
+    //     },
+    //   },
+    // }),
     table.display({
       id: 'actions',
       header: () => {
@@ -208,6 +214,7 @@
 
 <div class="space-y-4">
   <DataTableToolbar {tableModel} {data} />
+  <DataTablePagination {tableModel} />
   <div class="rounded-md border">
     <Table.Root {...$tableAttrs}>
       <Table.Header>

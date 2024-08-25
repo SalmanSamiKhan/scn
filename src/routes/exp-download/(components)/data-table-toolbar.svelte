@@ -13,16 +13,16 @@
 
 	const counts = data.reduce<{
 		status: { [index: string]: number };
-		priority: { [index: string]: number };
+		// priority: { [index: string]: number };
 	}>(
-		(acc, { status, priority }) => {
+		(acc, { status }) => {
 			acc.status[status] = (acc.status[status] || 0) + 1;
-			acc.priority[priority] = (acc.priority[priority] || 0) + 1;
+			// acc.priority[priority] = (acc.priority[priority] || 0) + 1;
 			return acc;
 		},
 		{
 			status: {},
-			priority: {},
+			// priority: {},
 		}
 	);
 
@@ -38,7 +38,7 @@
 	}: {
 		filterValues: Writable<{
 			status: string[];
-			priority: string[];
+			// priority: string[];
 		}>;
 	} = pluginStates.colFilter;
 
@@ -60,18 +60,18 @@
 			options={statuses}
 			counts={counts.status}
 		/>
-		<DataTableFacetedFilter
+		<!-- <DataTableFacetedFilter
 			bind:filterValues={$filterValues.priority}
 			title="Priority"
 			options={priorities}
 			counts={counts.priority}
-		/>
+		/> -->
 		{#if showReset}
 			<Button
 				on:click={() => {
 					$filterValue = "";
 					$filterValues.status = [];
-					$filterValues.priority = [];
+					// $filterValues.priority = [];
 				}}
 				variant="ghost"
 				class="h-8 px-2 lg:px-3"

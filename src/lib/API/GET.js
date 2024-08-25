@@ -58,7 +58,6 @@ export async function _fetch_data(url) {
 
     if (status >= 200 && status < 300) {
       const data = await response.json();
-      console.log('data==>', data)
       return data;
     } else if (status >= 300 && status < 400) {
       console.log('Redirect Error:', response.statusText)
