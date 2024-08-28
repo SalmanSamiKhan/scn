@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import "../app.css";
     import Navbar from "$lib/Common/Navbar/Navbar.svelte";
     import { ModeWatcher } from "mode-watcher";
@@ -20,6 +20,4 @@
 </div>
 
 <!-- ModeWatcher -->
-<ModeWatcher/>
-
-<slot></slot>
+<ModeWatcher />
