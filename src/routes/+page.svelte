@@ -4,7 +4,7 @@
     let cards = Object.values(cardDetails);
 </script>
 
-<h1 class="text-4xl text-center mt-10 pt-[50px]">Welcome to ALTRBot</h1>
+<h1 class="text-4xl text-center mt-10 pt-[20px]">Welcome to ALTRBot</h1>
 <div class="container mx-auto px-4 mt-10"> <!-- Added margin-top here for spacing -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {#each cards as card}
