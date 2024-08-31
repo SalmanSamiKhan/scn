@@ -27,10 +27,18 @@
   } from './index.js';
 
   import * as Table from '$lib/registry/new-york/ui/table/index.js';
-
+  import { Button } from "$lib/components/ui/button/index.js";
   // export let data: Task[];
   // export let data = [];
   export let data: Task[] = [];
+  import LoaderCircle from "lucide-svelte/icons/loader-circle";
+
+  let isRunning = false;
+
+  // Simulate a loading operation
+  async function handleStartClick() {
+    isRunning = true;
+  }
 
   const table = createTable(readable(data), {
     select: addSelectedRows(),
@@ -208,61 +216,126 @@
   ]);
 
   const tableModel = table.createViewModel(columns);
-
   const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = tableModel;
+    // Destructuring the pagination state
+    const{pluginStates}=tableModel;
+    const { pageIndex, pageSize } = pluginStates.page;
 </script>
 
 <div class="space-y-4">
+
+    <!-- Conditionally render the button based on isRunning -->
+    {#if isRunning}
+    <Button disabled>
+      <LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+      Running
+    </Button>
+  {:else}
+    <Button variant="destructive" on:click={handleStartClick}>
+      Start
+    </Button>
+  {/if}
+
+  
+  <!-- Toolbar and pagination components -->
   <DataTableToolbar {tableModel} {data} />
   <DataTablePagination {tableModel} />
+
   <div class="rounded-md border">
     <Table.Root {...$tableAttrs}>
       <Table.Header>
         {#each $headerRows as headerRow}
           <Subscribe rowAttrs={headerRow.attrs()}>
             <Table.Row>
+              <!-- Render checkbox and column headers -->
               {#each headerRow.cells as cell (cell.id)}
                 <Subscribe
                   attrs={cell.attrs()}
-                  let:attrs
                   props={cell.props()}
+                  let:attrs
                   let:props
                 >
-                  <Table.Head {...attrs}>
-                    {#if cell.id !== 'select' && cell.id !== 'actions'}
+                  {#if cell.id === 'select'}
+                    <Table.Head {...attrs}>
+                      <Render of={cell.render()} />
+                    </Table.Head>
+                  {/if}
+                </Subscribe>
+              {/each}
+
+              <!-- Render SL column header -->
+              <Table.Head>
+                <span>SL</span>
+              </Table.Head>
+
+              <!-- Render other column headers -->
+              {#each headerRow.cells as cell (cell.id)}
+                <Subscribe
+                  attrs={cell.attrs()}
+                  props={cell.props()}
+                  let:attrs
+                  let:props
+                >
+                  {#if cell.id !== 'select' && cell.id !== 'actions'}
+                    <Table.Head {...attrs}>
                       <DataTableColumnHeader
                         {props}
                         {tableModel}
                         cellId={cell.id}
                       >
-                        <Render of={cell.render()} /></DataTableColumnHeader
-                      >
-                    {:else}
+                        <Render of={cell.render()} />
+                      </DataTableColumnHeader>
+                    </Table.Head>
+                  {/if}
+
+                  {#if cell.id === 'actions'}
+                    <Table.Head {...attrs}>
                       <Render of={cell.render()} />
-                    {/if}
-                  </Table.Head>
+                    </Table.Head>
+                  {/if}
                 </Subscribe>
               {/each}
             </Table.Row>
           </Subscribe>
         {/each}
       </Table.Header>
+
       <Table.Body {...$tableBodyAttrs}>
         {#if $pageRows.length}
-          {#each $pageRows as row (row.id)}
+          {#each $pageRows as row, i (row.id)}
             <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
               <Table.Row {...rowAttrs}>
+                <!-- Render the checkbox -->
                 {#each row.cells as cell (cell.id)}
                   <Subscribe attrs={cell.attrs()} let:attrs>
-                    <Table.Cell {...attrs}>
-                      {#if cell.id === 'task'}
-                        <div class="w-[80px]">
-                          <Render of={cell.render()} />
-                        </div>
-                      {:else}
+                    {#if cell.id === 'select'}
+                      <Table.Cell {...attrs}>
                         <Render of={cell.render()} />
-                      {/if}
-                    </Table.Cell>
+                      </Table.Cell>
+                    {/if}
+                  </Subscribe>
+                {/each}
+
+                <!-- Render the SL number -->
+                <Table.Cell>
+                  <!-- Correct calculation for SL number -->
+                  <span>{($pageIndex * $pageSize) + (i + 1)}</span>
+                </Table.Cell>
+
+                <!-- Render the rest of the cells -->
+                {#each row.cells as cell (cell.id)}
+                  <Subscribe attrs={cell.attrs()} let:attrs>
+                    {#if cell.id !== 'select' && cell.id !== 'actions'}
+                      <Table.Cell {...attrs}>
+                        <Render of={cell.render()} />
+                      </Table.Cell>
+                    {/if}
+
+                    {#if cell.id === 'actions'}
+                      <Table.Cell {...attrs}>
+                        <Render of={cell.render()} />
+                      </Table.Cell>
+                    {/if}
                   </Subscribe>
                 {/each}
               </Table.Row>
@@ -270,7 +343,7 @@
           {/each}
         {:else}
           <Table.Row>
-            <Table.Cell colspan={columns.length} class="h-24 text-center">
+            <Table.Cell colspan={columns.length + 1} class="h-24 text-center">
               No results.
             </Table.Cell>
           </Table.Row>
@@ -278,5 +351,7 @@
       </Table.Body>
     </Table.Root>
   </div>
+
+  <!-- Bottom pagination -->
   <DataTablePagination {tableModel} />
 </div>

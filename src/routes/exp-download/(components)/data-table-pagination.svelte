@@ -8,13 +8,20 @@
 	import * as Select from "$lib/registry/new-york/ui/select/index.js";
 	import { Button } from "$lib/registry/new-york/ui/button/index.js";
 
+	import { stored_pageSize, stored_pageIndex } from "./stores"; // Import shared stores
+
 	export let tableModel: TableViewModel<Task>;
 
+	// Destructure the table model to get needed properties
 	const { pageRows, pluginStates, rows } = tableModel;
 
+	// Destructure pagination properties
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
-
 	const { selectedDataIds } = pluginStates.select;
+
+	// Subscriptions to the shared stores
+	$: $stored_pageSize = $pageSize; 
+	$: $stored_pageIndex = $pageIndex; 
 </script>
 
 <div class="flex items-center justify-between px-2">
@@ -26,7 +33,7 @@
 			<p class="text-sm font-medium">Rows per page</p>
 			<Select.Root
 				onSelectedChange={(selected) => pageSize.set(Number(selected?.value))}
-				selected={{ value: 10, label: "10" }}
+				selected={{ value: $pageSize, label: $pageSize.toString() }}
 			>
 				<Select.Trigger class="h-8 w-[70px]">
 					<Select.Value placeholder="Select page size" />
